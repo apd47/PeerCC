@@ -67,6 +67,7 @@ using System.Numerics;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI;
 using System.Collections.Concurrent;
+using Windows.Media.Capture.Frames;
 #endif
 
 namespace PeerConnectionClient.Signalling
@@ -542,10 +543,19 @@ namespace PeerConnectionClient.Signalling
                 new MediaCaptureInitializationSettings();
             mediaSettings.AudioDeviceId = "";
             mediaSettings.VideoDeviceId = "";
+
+            //DUPUISNOTE: Here's another place we can change the modes/source types
             mediaSettings.StreamingCaptureMode =
                 Windows.Media.Capture.StreamingCaptureMode.AudioAndVideo;
             mediaSettings.PhotoCaptureSource =
                 Windows.Media.Capture.PhotoCaptureSource.VideoPreview;
+
+            // DUPUISNOTE: Adding this to try and givew the HL2 all the power
+            mediaSettings.SharingMode = MediaCaptureSharingMode.ExclusiveControl;
+
+            // DUPUISNOTE: Adding this to help optimize the pipeline for RTC
+            mediaSettings.MediaCategory = MediaCategory.Communications;
+
             Task initTask = mediaAccessRequester.InitializeAsync(mediaSettings).AsTask();
             return initTask.ContinueWith(initResult => {
                 bool accessRequestAccepted = true;
