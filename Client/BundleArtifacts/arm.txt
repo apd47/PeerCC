@@ -1,0 +1,2 @@
+MainPackage=D:\web-rtc\webrtc-uwp-sdk\common\windows\samples\PeerCC\Output\PeerCC.Client\WebRtc\bin\ARM\Release\PeerConnectionClient.WebRtc_1.0.1.0_ARM.appx
+ResourcePack=D:\web-rtc\webrtc-uwp-sdk\common\windows\samples\PeerCC\Output\PeerCC.Client\WebRtc\bin\ARM\Release\PeerConnectionClient.WebRtc_1.0.1.0_scale-100.appx

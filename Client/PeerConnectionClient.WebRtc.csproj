@@ -17,9 +17,15 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>PeerConnectionClient.WebRtc_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <AppxBundlePlatforms>$(Platform)</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>BB8A06CAEDBC89DD4FD493DAE421659FB98BEEB9</PackageCertificateThumbprint>
+    <AppxBundlePlatforms>x64|arm</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>8E139C90E003018D1B2CFDDAB1DB754F66F25A4B</PackageCertificateThumbprint>
     <RuntimeIdentifiers />
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <AppxBundle>Always</AppxBundle>
+    <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
+    <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -129,7 +135,6 @@
     </AppxManifest>
     <Content Include="config.txt" />
     <Content Include="ecc-key.p12" />
-    <None Include="PeerConnectionClient.WebRtc_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.scale-100.png" />
@@ -183,6 +188,9 @@
       <Project>{3dd8fdcd-b703-4b75-826a-2c7e844f903e}</Project>
       <Name>Org.WebRtc</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PeerConnectionClient.WebRtc_TemporaryKey.pfx" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

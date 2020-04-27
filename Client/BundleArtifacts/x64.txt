@@ -1,0 +1,1 @@
+MainPackage=D:\web-rtc\webrtc-uwp-sdk\common\windows\samples\PeerCC\Output\PeerCC.Client\WebRtc\bin\x64\Release\PeerConnectionClient.WebRtc_1.0.1.0_x64.appx
