@@ -2219,8 +2219,8 @@ namespace PeerConnectionClient.ViewModels
             var configTraceFileName = "webrtc-trace.txt";
             var configTraceServerIp = "127.0.0.1";
             var configTraceServerPort = "55000";
-            var peerCcServerIp = new ValidableNonEmptyString("127.0.0.1");
-            var peerCcPortInt = 8888;
+            var peerCcServerIp = new ValidableNonEmptyString("52.170.6.82");
+            var peerCcPortInt = 2475;
 
             if (settings.Values["PeerCCServerIp"] != null)
             {
@@ -2266,11 +2266,11 @@ namespace PeerConnectionClient.ViewModels
             {
                 // Default values:
                 configIceServers.Clear();
-                configIceServers.Add(new IceServer("stun.l.google.com:19302", IceServer.ServerType.STUN));
-                configIceServers.Add(new IceServer("stun1.l.google.com:19302", IceServer.ServerType.STUN));
-                configIceServers.Add(new IceServer("stun2.l.google.com:19302", IceServer.ServerType.STUN));
-                configIceServers.Add(new IceServer("stun3.l.google.com:19302", IceServer.ServerType.STUN));
-                configIceServers.Add(new IceServer("stun4.l.google.com:19302", IceServer.ServerType.STUN));
+                configIceServers.Add(new IceServer("52.170.6.82:3478", IceServer.ServerType.STUN));
+                var turn = new IceServer("52.170.6.82:3479", IceServer.ServerType.TURN);
+                turn.Username = "interactiveCommons";
+                turn.Credential = "cwru2475";
+                configIceServers.Add(turn);
             }
 
             RunOnUiThread(() =>

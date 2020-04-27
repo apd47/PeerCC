@@ -764,6 +764,7 @@ namespace PeerConnectionClient.Signalling
         {
             if (!_selectedVideoDevice.Id.Equals("custom-capture") && !_selectedVideoDevice.Id.Equals("screen-share"))
             {
+                // DUPUISNOTE: Might need to add a MediaCapture.AddVideoEffect here if everything else doesn't work
                 MediaCapture mediaCapture = new MediaCapture();
                 MediaCaptureInitializationSettings mediaSettings =
                     new MediaCaptureInitializationSettings();
@@ -777,20 +778,35 @@ namespace PeerConnectionClient.Signalling
                         Debug.WriteLine("Failed to initialize video device: " + initResult.Exception.Message);
                         return null;
                     }
+
+                    // DUPUISNOTE: Here is where you choose the type of media stream to look up. 
                     var streamProperties =
                         mediaCapture.VideoDeviceController.GetAvailableMediaStreamProperties(MediaStreamType.VideoRecord);
+
                     IList<CaptureCapability> capabilityList = new List<CaptureCapability>();
                     foreach (VideoEncodingProperties property in streamProperties)
                     {
                         uint frameRate = (uint)(property.FrameRate.Numerator /
                             property.FrameRate.Denominator);
+
                         capabilityList.Add(new CaptureCapability
                         {
                             Width = (uint)property.Width,
                             Height = (uint)property.Height,
                             FrameRate = frameRate,
                             MrcEnabled = true,
-                            FrameRateDescription = $"{frameRate} fps",
+                            FrameRateDescription = $"{frameRate} fps (w/MRC)",
+                            ResolutionDescription = $"{property.Width} x {property.Height}"
+                        });
+
+                        //DUPUISNOTE: Added a non-mrc option to see if it would populate into the lists
+                        capabilityList.Add(new CaptureCapability
+                        {
+                            Width = (uint)property.Width,
+                            Height = (uint)property.Height,
+                            FrameRate = frameRate,
+                            MrcEnabled = false,
+                            FrameRateDescription = $"{frameRate} fps (No MRC)",
                             ResolutionDescription = $"{property.Width} x {property.Height}"
                         });
                     }
@@ -1018,6 +1034,7 @@ namespace PeerConnectionClient.Signalling
 
             Debug.WriteLine("Conductor: Getting user media.");
 
+            // DUPUISNOTE: Are this constraints too explicit/limiting the selection process?
             IReadOnlyList<UseConstraint> mandatoryConstraints = new List<UseConstraint>() {
                 new Constraint("maxWidth", VideoCaptureProfile.Width.ToString()),
                 new Constraint("minWidth", VideoCaptureProfile.Width.ToString()),
@@ -1069,6 +1086,7 @@ namespace PeerConnectionClient.Signalling
                 }
             }
 #else
+            // DUPUISNOTE: I think this is where I'll need to implement accessing the raw sensors?
             if (_selectedVideoDevice.Id.Equals("custom-capture"))
             {
                 _capturerTimer = new Timer((object o) =>
@@ -1140,9 +1158,15 @@ namespace PeerConnectionClient.Signalling
             var parameters = new VideoCapturerCreationParameters();
             parameters.Name = _selectedVideoDevice.Name;
             parameters.Id = _selectedVideoDevice.Id;
+            parameters.EnableMrc = VideoCaptureProfile.MrcEnabled;
+
+            // DUPUISNOTE: Can we enable different video profiles here? Or need to do earlier during resolution queries?
+            //parameters.VideoProfileKind = VideoProfileKind.VideoRecording;
+
             if (_selectedVideoDevice.Id.Equals("custom-capture") || _selectedVideoDevice.Id.Equals("screen-share"))
                 parameters.Factory = _factory;
             var videoCapturer = VideoCapturer.Create(parameters);
+            var supportedFormats = videoCapturer.GetSupportedFormats();
 
             VideoOptions options = new VideoOptions();
             options.Factory = _factory;
@@ -2118,6 +2142,8 @@ namespace PeerConnectionClient.Signalling
             (evt as IDisposable).Dispose();
         }
 
+
+        // DUPUISNOTE: What does this processing do? Why is it here?
         private void Process_VideoFrameBufferEvent(IVideoFrameBufferEvent evt)
         {
             var buffer = evt?.Buffer;
